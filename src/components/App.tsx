@@ -1,11 +1,11 @@
 import * as React from 'react'
-import 'assets/scss/App.scss'
+import '../assets/scss/App.scss'
 import Surface from 'components/Surface'
 import Map from 'components/Map'
 import Markers from 'components/Markers'
 import { IconContext } from 'react-icons'
 
-let scumMap = require('assets/img/scum-map.jpg')
+let scumMap = require('../assets/img/scum-map.jpg')
 
 let markers: IMarker[] = [
   {
@@ -64,6 +64,7 @@ export default class App extends React.Component<{}, IAppState> {
     this.handleMarkerClick = this.handleMarkerClick.bind(this)
     this.onPanStart = this.onPanStart.bind(this)
     this.afterPanEnd = this.afterPanEnd.bind(this)
+    this.addMarker = this.addMarker.bind(this)
   }
 
   componentDidMount() {
@@ -108,7 +109,11 @@ export default class App extends React.Component<{}, IAppState> {
         <div className="fake-sidebar1" />
         <IconContext.Provider value={{ color: 'blue' }}>
           <Surface onPanStart={this.onPanStart} afterPanEnd={this.afterPanEnd}>
-            <Map background={scumMap} panning={panning}>
+            <Map
+              background={scumMap}
+              panning={panning}
+              onAddMarker={this.addMarker}
+            >
               <Markers
                 markers={markers}
                 selectedMarkerId={selectedMarkerId}
@@ -125,6 +130,37 @@ export default class App extends React.Component<{}, IAppState> {
   handleMarkerClick(id) {
     this.setState({
       selectedMarkerId: id === this.state.selectedMarkerId ? null : id
+    })
+  }
+
+  addMarker(position: IPosition) {
+    if (!this.state.userName) {
+      let userName = prompt('You must pick a user name.')
+
+      this.setState(
+        {
+          userName: userName.trim()
+        },
+        () => {
+          this.addMarker(position)
+        }
+      )
+
+      return
+    }
+
+    let label = prompt('Marker Label?')
+
+    this.setState({
+      markers: this.state.markers.concat([
+        {
+          id: String(Math.random()),
+          position,
+          label,
+          creator: this.state.userName,
+          color: '#fff'
+        }
+      ])
     })
   }
 

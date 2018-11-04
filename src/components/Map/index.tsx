@@ -4,6 +4,7 @@ import { Wrapper } from './styled-components'
 export interface IMapProps {
   background: string
   panning: boolean
+  onAddMarker: (position) => void
 }
 
 export default class Map extends React.Component<IMapProps, {}> {
@@ -26,12 +27,20 @@ export default class Map extends React.Component<IMapProps, {}> {
   }
 
   handleClick(e) {
+    console.log('map click', this.props.panning)
+    // TODO(shawk): allow adding markers by clicking the map. Right now there
+    // seems to be an issue where after clicking to pan this handler fires so
+    // we might to do find a workaround. We only want to detect single left
+    // clicks that aren't the beginning of a pan or double click.
     if (e.isDefaultPrevented() || this.props.panning) {
       return
     }
 
-    // TODO(shawk): add marker
-
+    debugger
+    this.props.onAddMarker({
+      x: 0,
+      y: 0
+    })
     e.preventDefault()
   }
 }
