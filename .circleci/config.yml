@@ -9,10 +9,10 @@ jobs:
       - restore_cache:
           name: 'Restore Yarn Package Cache'
           keys:
-            - yarn-packages-$CACHE_VERSION-{{ .Branch }}-{{ checksum "yarn.lock" }}
-            - yarn-packages-$CACHE_VERSION-{{ .Branch }}
-            - yarn-packages-$CACHE_VERSION-master
-            - yarn-packages-$CACHE_VERSION-
+            - yarn-packages-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-packages-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}
+            - yarn-packages-{{ .Environment.CACHE_VERSION }}-master
+            - yarn-packages-{{ .Environment.CACHE_VERSION }}-
       - run:
           name: 'Install Dependencies'
           command: yarn install
